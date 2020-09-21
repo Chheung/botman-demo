@@ -9,17 +9,7 @@ While BotMan itself is framework agnostic, BotMan is also available as a bundle 
 
 You can find the BotMan and BotMan Studio documentation at [http://botman.io](http://botman.io).
 
-## Support the development
-**Do you like this project? Support it by donating**
-
-- PayPal: [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=m%2epociot%40googlemail%2ecom&lc=CY&item_name=BotMan&no_note=0&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest)
-- Patreon: [Donate](https://www.patreon.com/botman)
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within BotMan or BotMan Studio, please send an e-mail to Marcel Pociot at m.pociot@gmail.com. All security vulnerabilities will be promptly addressed.
-
-## License
-
-BotMan is free software distributed under the terms of the MIT license.
+## Steps
+- Install the app
+- Serve the app `php artisan serve`
 

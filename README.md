@@ -10,6 +10,6 @@ While BotMan itself is framework agnostic, BotMan is also available as a bundle 
 You can find the BotMan and BotMan Studio documentation at [http://botman.io](http://botman.io).
 
 ## Steps
-- Install the app
+- Install the app `composer install`
 - Serve the app `php artisan serve`
 

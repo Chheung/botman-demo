@@ -14,7 +14,7 @@ You can find the BotMan and BotMan Studio documentation at [http://botman.io](ht
 - Serve the app `php artisan serve`
 
 ## Integrate with facebook messenger
-# Steps: ( Reference: https://botman.io/2.0/driver-facebook-messenger )
+### Steps: ( Reference: https://botman.io/2.0/driver-facebook-messenger )
 - install facebook driver ( check the doc )
 - Add the following: 
   + FACEBOOK_TOKEN=your-facebook-page-token
@@ -29,6 +29,6 @@ You can find the BotMan and BotMan Studio documentation at [http://botman.io](ht
 - Test your connection out with postman. `E.g: https://{your ngrok or your site }/botman?hub.verify_token={your manual token in env}&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe
 - Restart your app once you successfully connected to the facebook.
 
-# For botman facebook guideline and UI please check `https://botman.io/2.0/driver-facebook-messenger`
+### For botman facebook guideline and UI please check `https://botman.io/2.0/driver-facebook-messenger`
 
 

@@ -25,7 +25,7 @@ You can find the BotMan and BotMan Studio documentation at [http://botman.io](ht
 - `FACEBOOK_VERIFICATION` is what you added by yourself to verify your connection between facebook and your app. ( you can put anything u want. but when you add the webhook they are needed to be matched. ).
 - After hosing ur localhost by `ngrok` u should be able to add ur webhook in facebook developer dashboard page. `example: {ur https ngrok}/botman`
 - `FACEBOOK_TOKEN` is retrieved by `token generation` after adding your webhook in Messenger product (located in develop facebook dashboard sidebar)
-- `FACEBOOK_TOKEN` is retrieved by `Dashboard => Setting => Basic`.
+- `FACEBOOK_APP_SECRET` is retrieved by `Dashboard => Setting => Basic`.
 - Test your connection out with postman. `E.g: https://{your ngrok or your site }/botman?hub.verify_token={your manual token in env}&hub.challenge=CHALLENGE_ACCEPTED&hub.mode=subscribe
 - Restart your app once you successfully connected to the facebook.
 

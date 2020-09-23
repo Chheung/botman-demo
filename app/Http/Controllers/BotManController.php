@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use BotMan\BotMan\BotMan;
 use Illuminate\Http\Request;
-use App\Conversations\Greeter;
+use App\Conversations\SurveyConversation;
 
 class BotManController extends Controller
 {
@@ -30,8 +30,8 @@ class BotManController extends Controller
      * Loaded through routes/botman.php
      * @param  BotMan $bot
      */
-    public function startConversation(BotMan $bot)
+    public function startSurvey(BotMan $bot)
     {
-        $bot->startConversation(new Greeter());
-    }
+        $bot->startConversation(new SurveyConversation());
+    }   
 }

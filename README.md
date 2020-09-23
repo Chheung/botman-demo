@@ -31,4 +31,8 @@ You can find the BotMan and BotMan Studio documentation at [http://botman.io](ht
 
 ### For botman facebook guideline and UI please check `https://botman.io/2.0/driver-facebook-messenger`
 
+## Database schema
+### Create your schema by `php artisan mysql:createdb botman_db`
+### Migrate the tables
+
 

@@ -4,6 +4,8 @@ namespace App\Conversations;
 
 use App\Question as Q;
 use App\Answer as A;
+use App\Result;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
 use BotMan\BotMan\Messages\Outgoing\Question;
@@ -27,20 +29,19 @@ class SurveyConversation extends Conversation
 
     function startSurvey() {
         $q = Q::find(1);
-        $answerButtons = array();
-        foreach(A::where('question_id', 1)->get()->toArray() as $answer) {
-            array_push(Button::create($answer->text)->value($answer->id));
+        $a = A::where('question_id', 1)->get();
+        $questionTemplate = Question::create($q->text);
+        foreach($a as $answer) {
+            $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
         }
-        $questionTemplate = Question::create($q->text)->addButtons([$answerButtons]);
-        $this->ask($questionTemplate, function (Answer $answer) {
-            if ($answer->isInteractiveMessageReply()) {
-                if ($answer->getValue() === '1') {
-                    $this->say('Alright! That is what I want to hear!');
-                } else {
-                    $this->say('Ouch! But dont worry because I am always here to cheer u up! I will tell you a joke!');
-                }
-            }
-        });
+        // $this->ask($questionTemplate, function (Answer $answer) {
+        //     if ($answer->isInteractiveMessageReply()) {
+        //         $text = $answer->getText();
+        //         $val = $answer->getValue();
+        //         $this->say('Cool! Your age is ' . $text);
+        //         Result::create(['question_id' => 1, 'answer_id' => $val]);
+        //     }
+        // });
     }
     /**
      * Start the conversation

@@ -34,14 +34,14 @@ class SurveyConversation extends Conversation
         foreach($a as $answer) {
             $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
         }
-        // $this->ask($questionTemplate, function (Answer $answer) {
-        //     if ($answer->isInteractiveMessageReply()) {
-        //         $text = $answer->getText();
-        //         $val = $answer->getValue();
-        //         $this->say('Cool! Your age is ' . $text);
-        //         Result::create(['question_id' => 1, 'answer_id' => $val]);
-        //     }
-        // });
+        $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+            if ($answer->isInteractiveMessageReply()) {
+                $text = $answer->getText();
+                $val = $answer->getValue();
+                $this->say('Cool! Your age is ' . $text);
+                Result::create(['question_id' => $q->id, 'answer_id' => $val]);
+            }
+        });
     }
     /**
      * Start the conversation

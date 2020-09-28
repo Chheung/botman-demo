@@ -5,6 +5,7 @@ namespace App\Conversations;
 use App\Question as Q;
 use App\Answer as A;
 use App\Result;
+use App\Survey;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -28,7 +29,13 @@ class SurveyConversation extends Conversation
         $this->say($list);
         $this->ask('Please choose one to continue!', function(Answer $answer) {
             $surveyId = $answer->getText();
+            $survey = Survey::find($surveyId);
+            if (!$survey) {
+                $this->say('Sorry we dont have this option yet');
+                return;
+            }
             $this->surveyQuestions = Q::where('survey_id', $surveyId)->get();
+            Log::info($this->surveyQuestions);
             $this->currentQuestion = $this->surveyQuestions->first()->id;
             $this->askQuestion();
         });
@@ -38,7 +45,6 @@ class SurveyConversation extends Conversation
         if ($this->currentQuestion <= $this->surveyQuestions->last()->id) {
             $q = Q::find($this->currentQuestion);
             $a = A::where('question_id', $this->currentQuestion)->get();
-            Log::info($q);
             $questionTemplate = Question::create($q->text);
             foreach($a as $answer) {
                 $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));

@@ -19,7 +19,7 @@ You can find the BotMan and BotMan Studio documentation at [http://botman.io](ht
 - Seed the datas by `php artisan db:seed`
 - Reset database ( will required to seed again ) `php artisan db:wipe`
 
-## Integrate with facebook messenger
+## Integrate with Facebook messenger
 ### Steps: ( Reference: https://botman.io/2.0/driver-facebook-messenger )
 - Install Facebook driver ( check the doc )
 - Add the following: 

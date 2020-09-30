@@ -25,9 +25,13 @@ class SurveyConversation extends Conversation
 
     function start()
     {
-        $list = "This is the list: \n 1. Health Insurance \n 2. Car Insurance";
-        $this->say($list);
-        $this->ask('Please choose one to continue!', function(Answer $answer) {
+        $surveyList = Survey::all();
+        $text = "This is the list:";
+        foreach($surveyList as $key=>$s) {
+            $text = $text . "\n" . $s->id . ")." . $s->title;
+        }
+        $text = $text . "\n Please choose one to continue!";
+        $this->ask($text, function(Answer $answer) {
             $surveyId = $answer->getText();
             $survey = Survey::find($surveyId);
             if (!$survey) {
@@ -35,9 +39,13 @@ class SurveyConversation extends Conversation
                 return;
             }
             $this->surveyQuestions = Q::where('survey_id', $surveyId)->get();
-            Log::info($this->surveyQuestions);
-            $this->currentQuestion = $this->surveyQuestions->first()->id;
-            $this->askQuestion();
+            if(count($this->surveyQuestions) > 0) {
+                $this->currentQuestion = $this->surveyQuestions->first()->id;
+                $this->askQuestion();
+            } else {
+                $this->say('Sorry there is no questions in this survey. Please try another one by typing Start!');
+                return;
+            }
         });
     }
 

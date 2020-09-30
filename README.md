@@ -21,7 +21,7 @@ You can find the BotMan and BotMan Studio documentation at [http://botman.io](ht
 
 ## Integrate with facebook messenger
 ### Steps: ( Reference: https://botman.io/2.0/driver-facebook-messenger )
-- install facebook driver ( check the doc )
+- Install Facebook driver ( check the doc )
 - Add the following: 
   + FACEBOOK_TOKEN=your-facebook-page-token
   + FACEBOOK_VERIFICATION=your-facebook-verification-token

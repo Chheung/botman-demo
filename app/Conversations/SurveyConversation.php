@@ -6,6 +6,7 @@ use App\Question as Q;
 use App\Answer as A;
 use App\Result;
 use App\Survey;
+use App\Enums\QuestionEnum;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Foundation\Inspiring;
 use BotMan\BotMan\Messages\Incoming\Answer;
@@ -26,9 +27,10 @@ class SurveyConversation extends Conversation
     function start()
     {
         $surveyList = Survey::all();
-        $text = "This is the list:";
+        $text = "This is the list: ";
         foreach($surveyList as $key=>$s) {
-            $text = $text . "\n" . $s->id . ")." . $s->title;
+            $index = $key + 1;
+            $text = $text . "\n" . $index . ")." . $s->title;
         }
         $text = $text . "\n Please choose one to continue!";
         $this->ask($text, function(Answer $answer) {
@@ -52,28 +54,37 @@ class SurveyConversation extends Conversation
     function askQuestion() {
         if ($this->currentQuestion <= $this->surveyQuestions->last()->id) {
             $q = Q::find($this->currentQuestion);
-            $a = A::where('question_id', $this->currentQuestion)->get();
             $questionTemplate = Question::create($q->text);
-            foreach($a as $answer) {
-                $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
-            }
-            $this->ask($questionTemplate, function (Answer $answer) use ($q) {
-                if ($answer->isInteractiveMessageReply()) {
-                    $text = $answer->getText();
-                    $val = $answer->getValue();
-                    $validAnswer = A::where('question_id', $q->id)->where('text', $text);
-                    if (!$validAnswer) {
-                        $this->say('Sorry, I did not get that. Please use the buttons.');
-                        $this->askQuestion();
-                    } else {
-                        Result::create(['question_id' => $q->id, 'answer_id' => $val]);
-                        $this->currentQuestion++;
-                        $this->askQuestion();
-                    }
+            if ($q->type == QuestionEnum::MCQ) {
+                $a = A::where('question_id', $this->currentQuestion)->get();
+                foreach($a as $answer) {
+                    $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
                 }
-            });
+                $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+                    if ($answer->isInteractiveMessageReply()) {
+                        $text = $answer->getText();
+                        $val = $answer->getValue();
+                        $validAnswer = A::where('question_id', $q->id)->where('text', $text);
+                        if (!$validAnswer) {
+                            $this->say('Sorry, I did not get that. Please use the buttons.');
+                            $this->askQuestion();
+                        } else {
+                            Result::create(['question_id' => $q->id, 'answer_id' => $val]);
+                            $this->currentQuestion++;
+                            $this->askQuestion();
+                        }
+                    }
+                });
+            } else {
+                $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+                    $text = $answer->getText();
+                    Result::create(['question_id' => $q->id, 'answer_value' => $text]);
+                    $this->currentQuestion++;
+                    $this->askQuestion();
+                });
+            }
         } else {
-            $this->say('Done');
+            $this->say('Congratulation! You have completed the survey!');
         }
     }
 

@@ -17,8 +17,9 @@ class CreateResultsTable extends Migration
             $table->increments('id');
             $table->unsignedInteger('question_id');
             $table->foreign('question_id')->references('id')->on('questions');
-            $table->unsignedInteger('answer_id');
+            $table->unsignedInteger('answer_id')->nullable();
             $table->foreign('answer_id')->references('id')->on('answers');
+            $table->string('answer_value')->nullable();
             $table->timestamps();
         });
     }

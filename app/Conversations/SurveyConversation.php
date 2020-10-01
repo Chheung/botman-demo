@@ -24,6 +24,8 @@ class SurveyConversation extends Conversation
 
     protected $currentQuestion;
 
+    protected $result = array();
+
     function start()
     {
         $surveyList = Survey::all();
@@ -40,7 +42,7 @@ class SurveyConversation extends Conversation
                 $this->say('Sorry we dont have this option yet');
                 return;
             }
-            $this->surveyQuestions = Q::where('survey_id', $surveyId)->get();
+            $this->surveyQuestions = Q::where(['survey_id'=> $surveyId, 'parent_id' => NULL])->get();
             if(count($this->surveyQuestions) > 0) {
                 $this->currentQuestion = $this->surveyQuestions->first()->id;
                 $this->askQuestion();
@@ -69,7 +71,7 @@ class SurveyConversation extends Conversation
                             $this->say('Sorry, I did not get that. Please use the buttons.');
                             $this->askQuestion();
                         } else {
-                            Result::create(['question_id' => $q->id, 'answer_id' => $val]);
+                            array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
                             $this->currentQuestion++;
                             $this->askQuestion();
                         }
@@ -78,12 +80,13 @@ class SurveyConversation extends Conversation
             } else {
                 $this->ask($questionTemplate, function (Answer $answer) use ($q) {
                     $text = $answer->getText();
-                    Result::create(['question_id' => $q->id, 'answer_value' => $text]);
+                    array_push($this->result, ['question_id' => $q->id, 'answer_id' => NULL, 'answer_value' => $text]);
                     $this->currentQuestion++;
                     $this->askQuestion();
                 });
             }
         } else {
+            Result::insert($this->result);
             $this->say('Congratulation! You have completed the survey!');
         }
     }

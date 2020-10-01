@@ -14,35 +14,63 @@ class AnswerSeeder extends Seeder
         $data = array(
             [
                 'text' => 'Yes',
-                'question_id' => '1'
+                'question_id' => '1',
+                'next_id' => NULL
             ],
             [
                 'text' => 'No',
-                'question_id' => '1'
+                'question_id' => '1',
+                'next_id' => NULL
             ],
             [
                 'text' => 'Male',
-                'question_id' => '2'
+                'question_id' => '2',
+                'next_id' => NULL
             ],
             [
                 'text' => 'Female',
-                'question_id' => '2'
+                'question_id' => '2',
+                'next_id' => NULL
             ],
             [
                 'text' => 'Yes',
-                'question_id' => '3'
+                'question_id' => '3',
+                'next_id' => NULL
             ],
             [
                 'text' => 'No',
-                'question_id' => '3'
+                'question_id' => '3',
+                'next_id' => NULL
             ],
             [
                 'text' => 'Yes',
-                'question_id' => '5'
+                'question_id' => '5',
+                'next_id' => NULL
             ],
             [
                 'text' => 'No',
-                'question_id' => '5'
+                'question_id' => '5',
+                'next_id' => NULL
+            ],
+            [
+                'text' => 'Yes',
+                'question_id' => '6',
+                'next_id' => 5
+            ],
+            [
+                'text' => 'No',
+                'question_id' => '6',
+                'next_id' => 5
+            ],
+            [
+                'text' => 'Yes',
+                'question_id' => '7',
+                'next_id' => 6
+            ],
+            [
+                'text' => 'No',
+                'question_id' => '7',
+                'next_id' => 6
             ]
         );
         DB::table('answers')->insert($data);

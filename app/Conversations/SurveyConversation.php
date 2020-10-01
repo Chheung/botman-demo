@@ -67,14 +67,14 @@ class SurveyConversation extends Conversation
                         $text = $answer->getText();
                         $val = $answer->getValue();
                         $validAnswer = A::where('question_id', $q->id)->where('text', $text);
-                        if (!$validAnswer) {
-                            $this->say('Sorry, I did not get that. Please use the buttons.');
-                            $this->askQuestion();
-                        } else {
+                        if ($validAnswer) {
                             array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
                             $this->currentQuestion++;
                             $this->askQuestion();
                         }
+                    } else {
+                        $this->say('Sorry, I did not get that. Please use the buttons.');
+                        $this->askQuestion();
                     }
                 });
             } else {

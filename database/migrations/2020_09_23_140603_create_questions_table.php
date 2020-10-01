@@ -18,8 +18,8 @@ class CreateQuestionsTable extends Migration
             $table->increments('id');
             $table->string('text');
             $table->string('type');
-            $table->unsignedInteger('survey_id');
             $table->integer('parent_id')->nullable();
+            $table->unsignedInteger('survey_id');
             $table->foreign('survey_id')->references('id')->on('surveys');
             $table->timestamps();
         });

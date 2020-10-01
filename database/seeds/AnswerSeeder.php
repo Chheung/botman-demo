@@ -44,7 +44,7 @@ class AnswerSeeder extends Seeder
                 'text' => 'No',
                 'question_id' => '5'
             ]
-            );
+        );
         DB::table('answers')->insert($data);
     }
 }

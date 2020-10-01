@@ -17,7 +17,7 @@ You can find the BotMan and BotMan Studio documentation at [http://botman.io](ht
 - Create your schema by `php artisan mysql:createdb botman_db`
 - Migrate the tables by `php artisan migrate`
 - Seed the datas by `php artisan db:seed`
-- Reset database ( will required to seed again ) `php artisan db:wipe`
+- Reset database ( will required to seed again ) `php artisan migrate:fresh`
 
 ## Integrate with Facebook messenger
 ### Steps: ( Reference: https://botman.io/2.0/driver-facebook-messenger )

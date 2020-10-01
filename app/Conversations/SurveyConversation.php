@@ -62,15 +62,30 @@ class SurveyConversation extends Conversation
                 foreach($a as $answer) {
                     $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
                 }
-                $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+                $this->ask($questionTemplate, function (Answer $answer) use ($q, $a) {
                     if ($answer->isInteractiveMessageReply()) {
-                        $text = $answer->getText();
                         $val = $answer->getValue();
-                        $validAnswer = A::where('question_id', $q->id)->where('text', $text);
+
+                        // For Facebook we can retrieve the answered button text but not for everything else. So I looped this for general purpose
+                        // Reference: https://github.com/botman/driver-facebook/issues/70
+                        // $text = $answer->getText();
+
+                        $text = '';
+                        foreach($a as $ans) {
+                            if ($ans->id == $val) {
+                                $text = $ans->text;
+                            }
+                        }
+                        $validAnswer = A::where('question_id', $q->id)->where('text', $text)->first();
                         if ($validAnswer) {
-                            array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
-                            $this->currentQuestion++;
-                            $this->askQuestion();
+                            if ($validAnswer->next_id) {
+                                array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
+                                $this->askSubQuestion($validAnswer->next_id);
+                            } else {
+                                array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
+                                $this->currentQuestion++;
+                                $this->askQuestion();
+                            }
                         }
                     } else {
                         $this->say('Sorry, I did not get that. Please use the buttons.');
@@ -88,6 +103,42 @@ class SurveyConversation extends Conversation
         } else {
             Result::insert($this->result);
             $this->say('Congratulation! You have completed the survey!');
+        }
+    }
+
+    function askSubQuestion($nextId) {
+        $q = Q::find($nextId);
+        $questionTemplate = Question::create($q->text);
+        if ($q->type == QuestionEnum::MCQ) {
+            $a = A::where('question_id', $nextId)->get();
+            foreach($a as $answer) {
+                $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
+            }
+            $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+                if ($answer->isInteractiveMessageReply()) {
+                    $text = $answer->getText();
+                    $val = $answer->getValue();
+                    $validAnswer = A::where('question_id', $q->id)->where('text', $text);
+                    if ($validAnswer->next_id) {
+                        array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
+                        $this->askSubQuestion($validAnswer->next_id);
+                    } else {
+                        array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
+                        $this->currentQuestion++;
+                        $this->askQuestion();
+                    }
+                } else {
+                    $this->say('Sorry, I did not get that. Please use the buttons.');
+                    $this->askQuestion();
+                }
+            });
+        } else {
+            $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+                $text = $answer->getText();
+                array_push($this->result, ['question_id' => $q->id, 'answer_id' => NULL, 'answer_value' => $text]);
+                $this->currentQuestion++;
+                $this->askQuestion();
+            });
         }
     }
 

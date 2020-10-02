@@ -15,7 +15,7 @@ class AnswerSeeder extends Seeder
             [
                 'text' => 'Yes',
                 'question_id' => 1,
-                'next_id' => 5
+                'next_id' => NULL
             ],
             [
                 'text' => 'No',

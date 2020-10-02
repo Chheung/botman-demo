@@ -114,11 +114,20 @@ class SurveyConversation extends Conversation
             foreach($a as $answer) {
                 $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
             }
-            $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+            $this->ask($questionTemplate, function (Answer $answer) use ($q, $a) {
                 if ($answer->isInteractiveMessageReply()) {
-                    $text = $answer->getText();
                     $val = $answer->getValue();
-                    $validAnswer = A::where('question_id', $q->id)->where('text', $text);
+                    // For Facebook we can retrieve the answered button text but not for everything else. So I looped this for general purpose
+                    // Reference: https://github.com/botman/driver-facebook/issues/70
+                    // $text = $answer->getText();
+
+                    $text = '';
+                    foreach($a as $ans) {
+                        if ($ans->id == $val) {
+                            $text = $ans->text;
+                        }
+                    }
+                    $validAnswer = A::where('question_id', $q->id)->where('text', $text)->first();
                     if ($validAnswer->next_id) {
                         array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
                         $this->askSubQuestion($validAnswer->next_id);

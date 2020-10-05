@@ -42,7 +42,7 @@ class SurveyConversation extends Conversation
                 $this->say('Sorry we dont have this option yet');
                 return;
             }
-            $this->surveyQuestions = Q::where(['survey_id'=> $surveyId, 'parent_id' => NULL])->get();
+            $this->surveyQuestions = Q::with('answers')->where(['survey_id'=> $surveyId, 'parent_id' => NULL])->get();
             if(count($this->surveyQuestions) > 0) {
                 $this->askQuestion();
             } else {
@@ -55,7 +55,7 @@ class SurveyConversation extends Conversation
     function askQuestion() {
         if ($this->currentIndex < count($this->surveyQuestions)) {
             $q = $this->surveyQuestions[$this->currentIndex];
-            $a = A::where('question_id', $q->id)->get();
+            $a = $q->answers;
             $questionTemplate = Question::create($q->text);
             if ($q->type == QuestionEnum::MCQ) {
                 foreach($a as $answer) {
@@ -106,8 +106,8 @@ class SurveyConversation extends Conversation
     }
 
     function askSubQuestion($nextId) {
-        $q = Q::find($nextId);
-        $a = A::where('question_id', $nextId)->get();
+        $q = Q::with('answers')->find($nextId);
+        $a = $q->answers;
         $questionTemplate = Question::create($q->text);
         if ($q->type == QuestionEnum::MCQ) {
             foreach($a as $answer) {

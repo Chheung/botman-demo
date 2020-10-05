@@ -15,48 +15,76 @@ class Insert003SurveyTwoQuestion extends Seeder
         $enum = new QuestionEnum();
         $data = array(
             [
-                'text' => 'Do you currently have life insurance?',
-                'survey_id' => '1',
+                //id--12
+                'text' => 'What type of Health Insurance plan are you looking for?',
+                'survey_id' => '2',
                 'type' => $enum::MCQ,
                 'parent_id' => NULL
             ],
             [
-                'text' => 'What is your gender?',
-                'survey_id' => '1',
+                //id--13
+                'text' => 'When would you like coverage?',
+                'survey_id' => '2',
                 'type' => $enum::MCQ,
-                'parent_id' => NULL
+                'parent_id' => 12
             ],
             [
-                'text' => 'Have you used tobacco products within the last 12 months?',
-                'survey_id' => '1',
+                //id--14
+                'text' => 'What is your total household income?',
+                'survey_id' => '2',
                 'type' => $enum::MCQ,
-                'parent_id' => NULL
+                'parent_id' => 12
             ],
             [
-                'text' => 'What is your weight (lbs)?',
-                'survey_id' => '1',
+                //id--15
+                'text' => 'Are you looking to include your spouse in your Health Insurance plan?',
+                'survey_id' => '2',
+                'type' => $enum::MCQ,
+                'parent_id' => 12
+            ],
+            [
+                //id--16
+                'text' => "What is your spouse's gender?",
+                'survey_id' => '2',
+                'type' => $enum::MCQ,
+                'parent_id' => 13
+            ],
+            [
+                //id--17
+                'text' => "What is your spouse's birthdate?",
+                'survey_id' => '2',
                 'type' => $enum::INPUT,
-                'parent_id' => NULL
+                'parent_id' => 13
             ],
             [
-                'text' => 'Are you married?',
-                'survey_id' => '1',
+                //id--18
+                'text' => 'Has your spouse used tobacco products within the last 12 months?',
+                'survey_id' => '2',
                 'type' => $enum::MCQ,
-                'parent_id' => NULL
+                'parent_id' => 13
             ],
             [
-                'text' => 'Do you have a child?',
-                'survey_id' => '1',
+                //id--19
+                'text' => 'Are you looking to include your children in your Health Insurance plan?',
+                'survey_id' => '2',
                 'type' => $enum::MCQ,
-                'parent_id' => '5'
+                'parent_id' => 13
             ],
             [
-                'text' => 'Does your child have any insurance?',
-                'survey_id' => '1',
+                //id--20
+                'text' => 'Do any applicants weigh over 325 lbs if male, or over 275 lbs if female?',
+                'survey_id' => '2',
                 'type' => $enum::MCQ,
-                'parent_id' => '6'
-            ]
+                'parent_id' => 13
+            ],
+            [
+                //id--21
+                'text' => 'Do any applicants have any pre-existing conditions or been treated for any major medical conditions within the past 5 years?',
+                'survey_id' => '2',
+                'type' => $enum::MCQ,
+                'parent_id' => 13
+            ],
         );
-        // DB::table('questions')->insert($data);
+        DB::table('questions')->insert($data);
     }
 }

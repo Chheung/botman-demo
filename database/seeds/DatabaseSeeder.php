@@ -15,5 +15,6 @@ class DatabaseSeeder extends Seeder
         $this->call(Insert002SurveyOneQuestion::class);
         $this->call(Insert003SurveyTwoQuestion::class);
         $this->call(Insert004SurveyOneAnswer::class);
+        $this->call(Insert005SurveyTwoAnswer::class);
     }
 }

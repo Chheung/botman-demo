@@ -74,15 +74,15 @@ class Insert002SurveyOneQuestion extends Seeder
                 //id=9
                 'text' => 'How much total income do you earn per year?',
                 'survey_id' => '1',
-                'type' => $enum::MCQ,
-                'parent_id' => NULL
+                'type' => $enum::INPUT,
+                'parent_id' => 7
             ],
             [
                 //id=10
                 'text' => 'Do you have a mortage?',
                 'survey_id' => '1',
-                'type' => $enum::MCQ,
-                'parent_id' => NULL
+                'type' => $enum::INPUT,
+                'parent_id' => 7
             ],
             [
                 //id=11

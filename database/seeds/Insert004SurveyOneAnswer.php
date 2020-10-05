@@ -105,15 +105,15 @@ class Insert004SurveyOneAnswer extends Seeder
             [
                 'text' => 'INPUT',
                 'question_id' => 10,
-                'next_id' => 11
-            ],
-            [
-                'text' => 'No',
-                'question_id' => 11,
                 'next_id' => NULL
             ],
             [
                 'text' => 'Yes',
+                'question_id' => 11,
+                'next_id' => NULL
+            ],
+            [
+                'text' => 'No',
                 'question_id' => 11,
                 'next_id' => NULL
             ]

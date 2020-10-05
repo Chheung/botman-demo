@@ -22,7 +22,7 @@ class SurveyConversation extends Conversation
 
     protected $surveyQuestions;
 
-    protected $currentQuestion;
+    protected $currentIndex = 0;
 
     protected $result = array();
 
@@ -44,7 +44,6 @@ class SurveyConversation extends Conversation
             }
             $this->surveyQuestions = Q::where(['survey_id'=> $surveyId, 'parent_id' => NULL])->get();
             if(count($this->surveyQuestions) > 0) {
-                $this->currentQuestion = $this->surveyQuestions->first()->id;
                 $this->askQuestion();
             } else {
                 $this->say('Sorry there is no questions in this survey. Please try another one by typing Start!');
@@ -54,11 +53,11 @@ class SurveyConversation extends Conversation
     }
 
     function askQuestion() {
-        if ($this->currentQuestion <= $this->surveyQuestions->last()->id) {
-            $q = Q::find($this->currentQuestion);
+        if ($this->currentIndex < count($this->surveyQuestions)) {
+            $q = $this->surveyQuestions[$this->currentIndex];
+            $a = A::where('question_id', $q->id)->get();
             $questionTemplate = Question::create($q->text);
             if ($q->type == QuestionEnum::MCQ) {
-                $a = A::where('question_id', $this->currentQuestion)->get();
                 foreach($a as $answer) {
                     $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
                 }
@@ -78,12 +77,12 @@ class SurveyConversation extends Conversation
                         }
                         $validAnswer = A::where('question_id', $q->id)->where('text', $text)->first();
                         if ($validAnswer) {
+                            array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
                             if ($validAnswer->next_id) {
-                                array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
+                                Log::info("Hi i'm next");
                                 $this->askSubQuestion($validAnswer->next_id);
                             } else {
-                                array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
-                                $this->currentQuestion++;
+                                $this->currentIndex++;
                                 $this->askQuestion();
                             }
                         }
@@ -93,10 +92,11 @@ class SurveyConversation extends Conversation
                     }
                 });
             } else {
-                $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+                $this->ask($questionTemplate, function (Answer $answer) use ($q, $a) {
+                    $a = $a->first();
                     $text = $answer->getText();
-                    array_push($this->result, ['question_id' => $q->id, 'answer_id' => NULL, 'answer_value' => $text]);
-                    $this->currentQuestion++;
+                    array_push($this->result, ['question_id' => $q->id, 'answer_id' => $a->id, 'answer_value' => $text]);
+                    $this->currentIndex++;
                     $this->askQuestion();
                 });
             }
@@ -108,9 +108,9 @@ class SurveyConversation extends Conversation
 
     function askSubQuestion($nextId) {
         $q = Q::find($nextId);
+        $a = A::where('question_id', $nextId)->get();
         $questionTemplate = Question::create($q->text);
         if ($q->type == QuestionEnum::MCQ) {
-            $a = A::where('question_id', $nextId)->get();
             foreach($a as $answer) {
                 $questionTemplate->addButton(Button::create($answer->text)->value($answer->id));
             }
@@ -128,12 +128,11 @@ class SurveyConversation extends Conversation
                         }
                     }
                     $validAnswer = A::where('question_id', $q->id)->where('text', $text)->first();
+                    array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
                     if ($validAnswer->next_id) {
-                        array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
                         $this->askSubQuestion($validAnswer->next_id);
                     } else {
-                        array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
-                        $this->currentQuestion++;
+                        $this->currentIndex++;
                         $this->askQuestion();
                     }
                 } else {
@@ -142,11 +141,16 @@ class SurveyConversation extends Conversation
                 }
             });
         } else {
-            $this->ask($questionTemplate, function (Answer $answer) use ($q) {
+            $this->ask($questionTemplate, function (Answer $answer) use ($q, $a) {
+                $a = $a->first();
                 $text = $answer->getText();
-                array_push($this->result, ['question_id' => $q->id, 'answer_id' => NULL, 'answer_value' => $text]);
-                $this->currentQuestion++;
-                $this->askQuestion();
+                array_push($this->result, ['question_id' => $q->id, 'answer_id' => $a->id, 'answer_value' => $text]);
+                if ($a->next_id) {
+                    $this->askSubQuestion($a->next_id);
+                } else {
+                    $this->currentIndex++;
+                    $this->askQuestion();
+                }
             });
         }
     }

@@ -57,6 +57,6 @@ class Insert003SurveyTwoQuestion extends Seeder
                 'parent_id' => '6'
             ]
         );
-        DB::table('questions')->insert($data);
+        // DB::table('questions')->insert($data);
     }
 }

@@ -79,7 +79,6 @@ class SurveyConversation extends Conversation
                         if ($validAnswer) {
                             array_push($this->result, ['question_id' => $q->id, 'answer_id' => $val, 'answer_value' => NULL]);
                             if ($validAnswer->next_id) {
-                                Log::info("Hi i'm next");
                                 $this->askSubQuestion($validAnswer->next_id);
                             } else {
                                 $this->currentIndex++;

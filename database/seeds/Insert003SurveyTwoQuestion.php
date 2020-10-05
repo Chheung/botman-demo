@@ -3,7 +3,7 @@
 use App\Enums\QuestionEnum;
 use Illuminate\Database\Seeder;
 
-class QuestionSeeder extends Seeder
+class Insert003SurveyTwoQuestion extends Seeder
 {
     /**
      * Run the database seeds.

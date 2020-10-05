@@ -11,8 +11,9 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(SurveySeeder::class);
-        $this->call(QuestionSeeder::class);
-        $this->call(AnswerSeeder::class);
+        $this->call(Insert001SurveySeeder::class);
+        $this->call(Insert002SurveyOneQuestion::class);
+        $this->call(Insert003SurveyTwoQuestion::class);
+        $this->call(Insert004SurveyOneAnswer::class);
     }
 }

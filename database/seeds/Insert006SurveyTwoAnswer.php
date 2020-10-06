@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class Insert005SurveyTwoAnswer extends Seeder
+class Insert006SurveyTwoAnswer extends Seeder
 {
     /**
      * Run the database seeds.

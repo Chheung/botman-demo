@@ -107,7 +107,7 @@ class SurveyConversation extends Conversation
                     $this->result[$i]['username'] = $text;
                 }
                 Result::insert($this->result);
-                $this->say('Congratulation! You have completed the survey!');
+                $this->say('Fabulous! You have completed the survey!');
             });
         }
     }

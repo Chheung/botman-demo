@@ -17,7 +17,7 @@ class SurveyController extends Controller
     {
         $survey = Survey::all();
         
-        return $this->baseRetrieveResponse('Survey Retrieved Successfully', $survey);
+        return $this->successResponse('Survey Retrieved Successfully', $survey);
         
     }
 
@@ -31,7 +31,7 @@ class SurveyController extends Controller
     {
         $survey = Survey::create($request->all());
 
-        return $this->baseCreateResponse('Survey created.', $survey);
+        return $this->createResponse('Survey created.', $survey);
     }
 
     /**
@@ -43,7 +43,7 @@ class SurveyController extends Controller
     public function show($id)
     {
         $survey =  Survey::findOrFail($id);
-        return $this->baseRetrieveResponse('Survey Retrieved Successfully', $survey);
+        return $this->successResponse('Survey Retrieved Successfully', $survey);
     }
 
     /**
@@ -58,7 +58,7 @@ class SurveyController extends Controller
         $survey = Survey::findOrFail($id);
         $survey->update($request->all());
 
-        return $this->baseUpdateResponse('Survey updated.', $survey);
+        return $this->successResponse('Survey updated.', $survey);
     }
 
     /**
@@ -72,6 +72,6 @@ class SurveyController extends Controller
         $survey = Survey::findOrFail($id);
         $survey->delete();
         
-        return $this->baseDeleteResponse('Survey deleted.');
+        return $this->successResponse('Survey deleted.');
     }
 }

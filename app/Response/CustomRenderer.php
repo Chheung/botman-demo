@@ -42,28 +42,14 @@ trait CustomRenderer {
       return $this->respond($data);
   }
 
-  public function baseCreateResponse($message = 'Item created', $payload = [])
+  public function createResponse($message = 'Item created', $payload = [])
   { 
         $status = 'success';
         $this->setStatusCode(IlluminateResponse::HTTP_CREATED);
         return $this->baseSuccessRespond($message, $status, $payload);
   }
   
-  public function baseRetrieveResponse($message = 'Successfully retrieved', $payload = [])
-  { 
-        $status = 'success';
-        $this->setStatusCode(IlluminateResponse::HTTP_OK);
-        return $this->baseSuccessRespond($message, $status, $payload);
-  }
-
-  public function baseUpdateResponse($message = 'Item updated', $payload = [])
-  { 
-        $status = 'success';
-        $this->setStatusCode(IlluminateResponse::HTTP_OK);
-        return $this->baseSuccessRespond($message, $status, $payload);
-  }
-
-  public function baseDeleteResponse($message = 'Item Deleted', $payload = [])
+  public function successResponse($message = 'Successfully retrieved', $payload = [])
   { 
         $status = 'success';
         $this->setStatusCode(IlluminateResponse::HTTP_OK);

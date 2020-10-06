@@ -18,7 +18,6 @@ class SurveyController extends Controller
         $survey = Survey::all();
         
         return $this->successResponse('Survey Retrieved Successfully', $survey);
-        
     }
 
     /**

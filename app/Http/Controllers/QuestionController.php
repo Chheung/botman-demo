@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Question;
 
 class QuestionController extends Controller
 {
@@ -11,30 +13,23 @@ class QuestionController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $question = ($request->include == "answers") ? Question::with('answers')->get() : Question::all();
+        return $this->successResponse('Questions Retrieved Successfully', $question);
     }
 
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return \Illuminate\Http\Response  $response
      */
     public function store(Request $request)
     {
-        //
+        $question = Question::create($request->all());
+
+        return $this->createResponse('Question created.', $question);
     }
 
     /**
@@ -45,18 +40,8 @@ class QuestionController extends Controller
      */
     public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
+        $question =  Question::findOrFail($id);
+        return $this->successResponse('Question Retrieved Successfully', $question);
     }
 
     /**
@@ -68,7 +53,10 @@ class QuestionController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $question->update($request->all());
+
+        return $this->successResponse('Question updated.', $question);
     }
 
     /**
@@ -79,6 +67,9 @@ class QuestionController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $question = Question::findOrFail($id);
+        $question->delete();
+        
+        return $this->successResponse('Question deleted.');
     }
 }

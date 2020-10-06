@@ -27,14 +27,14 @@ trait CustomRenderer {
       return response()->json($data, $this->getStatusCode());
   }
 
-  public function baseSuccessRespond($message, $status = 'success', $payload = [], $errors = [])
+  public function baseSuccessResponse($message, $status = 'success', $payload = [])
   {
       $data = array(
           'status' => $status,
           'message' => $message,
           'status_code' => $this->getStatusCode(),
       );
-      if ($status === 'fail' && count($errors)) {
+      if ($status === 'fail') {
           $data = array_merge(['errors' => $errors], $data);
       } else {
         $data['data'] = $payload;
@@ -46,13 +46,27 @@ trait CustomRenderer {
   { 
         $status = 'success';
         $this->setStatusCode(IlluminateResponse::HTTP_CREATED);
-        return $this->baseSuccessRespond($message, $status, $payload);
+        return $this->baseSuccessResponse($message, $status, $payload);
   }
   
   public function successResponse($message = 'Successfully retrieved', $payload = [])
   { 
         $status = 'success';
         $this->setStatusCode(IlluminateResponse::HTTP_OK);
-        return $this->baseSuccessRespond($message, $status, $payload);
+        return $this->baseSuccessResponse($message, $status, $payload);
+  }
+
+  public function baseErrorResponse($message, $error = [])
+  {
+        $status = 'fail';
+        $data = array(
+            'status' => $status,
+            'message' => $message,
+            'status_code' => $this->getStatusCode(),
+        );
+        if (count($error)) {
+            $data = array_merge(['errors' => $errors], $data);
+        }
+        return $this->respond($data);
   }
 }

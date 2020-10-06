@@ -16,3 +16,17 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+/*
+    Survey Controllers
+*/
+
+Route::resources([
+    'surveys' => SurveyController::class,
+    'questions' => QuestionController::class,
+    'answers' => AnswerController::class
+]);
+
+Route::get('results', function () {
+    return 'result';
+});

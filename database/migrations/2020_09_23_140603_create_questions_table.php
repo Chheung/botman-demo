@@ -20,7 +20,7 @@ class CreateQuestionsTable extends Migration
             $table->string('type');
             $table->integer('parent_id')->nullable();
             $table->unsignedInteger('survey_id');
-            $table->foreign('survey_id')->references('id')->on('surveys');
+            $table->foreign('survey_id')->references('id')->on('surveys')->onDelete('cascade');
             $table->timestamps();
         });
     }

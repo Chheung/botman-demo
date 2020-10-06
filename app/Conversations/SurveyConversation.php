@@ -100,8 +100,15 @@ class SurveyConversation extends Conversation
                 });
             }
         } else {
-            Result::insert($this->result);
-            $this->say('Congratulation! You have completed the survey!');
+            $questionTemplate = Question::create("Final step! Please enter your name");
+            $this->ask($questionTemplate, function (Answer $answer) {
+                $text = $answer->getText();
+                foreach($this->result as $i=>$res) {
+                    $this->result[$i]['username'] = $text;
+                }
+                Result::insert($this->result);
+                $this->say('Congratulation! You have completed the survey!');
+            });
         }
     }
 
@@ -116,6 +123,7 @@ class SurveyConversation extends Conversation
             $this->ask($questionTemplate, function (Answer $answer) use ($q, $a) {
                 if ($answer->isInteractiveMessageReply()) {
                     $val = $answer->getValue();
+
                     // For Facebook we can retrieve the answered button text but not for everything else. So I looped this for general purpose
                     // Reference: https://github.com/botman/driver-facebook/issues/70
                     // $text = $answer->getText();

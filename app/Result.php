@@ -9,6 +9,6 @@ class Result extends Model
     protected $table = 'results';
 
     protected $fillable = [
-        'question_id', 'answer_id', 'answer_value'
+        'username', 'question_id', 'answer_id', 'answer_value'
     ];
 }
